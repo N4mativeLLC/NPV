@@ -33,7 +33,7 @@ public class Fnb {
     public static void main(String[] args) {
     	
     	//String csvFile = args[1];//"/Users/surbhi/Documents/workspace/NPV/src/main/resources/n4mative - CSV - 20 Sample.csv";
-    	String csvFile= "/Users/surbhi/Documents/workspace/NPV/src/main/resources/20190409_Video_Final_v1.csv";
+    	String csvFile= "/Users/surbhi/git/NPV/src/main/resources/InputData.csv";//"/Users/surbhi/Documents/workspace/NPV/src/main/resources/20190409_Video_Final_v1.csv";
     	String purlFile= "/Users/surbhi/Documents/workspace/NPV/src/main/resources/purl_04092019_9900.csv";
     	String dt = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
     	

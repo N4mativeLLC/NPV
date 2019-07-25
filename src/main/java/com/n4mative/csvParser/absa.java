@@ -16,7 +16,12 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.text.WordUtils;
+
+//import org.springframework.core.env.Environment;
 import com.n4mative.database.ConnectionPool;
+//import com.n4mative.database.ConnectionPool;
 
 public class absa {
 	
@@ -26,12 +31,18 @@ public class absa {
     
     public static void main(String[] args) {
     	
-    	String inputFile= args[1];//"/Users/surbhi/Documents/workspace/NPV/src/main/resources/absa_input.csv";
-    	//String purlFile= args[1];//"/Users/surbhi/Documents/workspace/NPV/src/main/resources/purl_20190515.csv";
+    	/*String inputFile= args[1];
+    	//String purlFile= args[1];
     	String outputFilePath=args[2];
-    	String host = args[3];//"192.168.1.71";
-        String db = args[4];//"NPV_QA";
-        String clientName=args[5];//"absa";
+    	String host = args[3];
+        String db = args[4];
+        String clientName=args[5];*/
+        //String inputFile="/Users/surbhi/git/NPV/src/main/resources/InputData.csv";
+    	String inputFile= "/Users/surbhi/git/NPV/src/main/resources/purl-20190718.csv";
+    	String outputFilePath="/Users/surbhi/git/NPV/src/main/resources/output/absa";
+    	String host = "192.168.1.71";
+        String db = "NPV_QA";
+        String clientName="absa";
     	String dt = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
     	
     	if (args[0].equalsIgnoreCase("initialFile")){
@@ -85,7 +96,7 @@ public class absa {
     
     private static void saveClient(int count, String customer_id, String customer_name,  String data_string, String host, String db, String clientName) {
 		
-    	System.out.println("host: " + host + "  db: " + db);
+    	//System.out.println("host: " + host + "  db: " + db);
         CallableStatement stmt = null;
 		String strSQL = "{call sp_InsertClientInfo(?,?,?,?,?,?,?,?)}";
 		
@@ -134,19 +145,22 @@ public class absa {
 			String line=clt.getData_string();
 			
 			String dataRow="";
+			String parsedFileName="";
         	line=line.trim();
         	if (!line.endsWith("|"))
         			line+=strDelim;
         	String[] data = line.split(cvsSplitBy);
-        	String parsedName="Hello, "+data[1];
-        	
-        	dataRow+=data[0]+ strDelim +data[1]+strDelim+ parsedName+ strDelim+data[2];         
+        	String parsedName="Hello, "+WordUtils.capitalizeFully(data[1]);
+        	parsedFileName=data[1].replaceAll("-", "_");
+        
+        	dataRow+=data[0]+ strDelim +WordUtils.capitalizeFully(data[1])+strDelim+ parsedName
+        			+strDelim+parsedFileName+ strDelim+data[2];         
         	
         	update_status_PreProcess(clt.getClient_id(),clt.getProject_id(),
         			clt.getGenerate_id(),clt.getCustomer_id(),dataRow,host,db,clientName);
       	}
             
-			System.out.println(" Pre Process completed successfully.");
+			//System.out.println(" Pre Process completed successfully.");
 	}
 
 	private static void update_status_PreProcess(int client_id, int project_id, int generate_id, String customer_id, String dataRow, String host, String db, String clientName) {
@@ -262,7 +276,7 @@ public class absa {
             //FileWriter fw1 = new FileWriter(filename1);
             List<Client> clients = getClient(initialLetter,host,db,clientName);
             
-            String header="Customer_id|CustomerName|HelloName|ABSA_Rewards_Member";
+            String header="Customer_id|CustomerName|HelloName|FileName|ABSA_Rewards_Member";
             fw.append(header);
             fw.append('\n');
               for(Client clt : clients){
@@ -458,7 +472,7 @@ public class absa {
 	    	FileWriter fw = new FileWriter(filename);
 	    	List<Client> clients = getClient(initialLetter,host,db,clientName);
 	    	
-        	String header="Customer_id|Customer_name|Video|ThumbNail_link";
+        	String header="Customer_id|Customer_name|Video";//|ThumbNail_link";
         	fw.append(header);
         	fw.append('\n');
           	for(Client clt : clients){
@@ -466,9 +480,10 @@ public class absa {
 			    fw.append('|');
 			    fw.append(clt.getCustomer_name());
 			    fw.append('|');
-			    fw.append(clt.getVideo_file());
-			    fw.append('|');
-			    fw.append(clt.getThumbnail_link());
+			    fw.append("https://absa.nvidyo.co.za/n4mvp/v2/testVideo/videoJsAutoPlayNm.html?v=/videos/absa/wimi_afm/"+
+			    			clt.getVideo_file());
+			    //fw.append('|');
+			    //fw.append(clt.getThumbnail_link());
 			    
 			    fw.append('\n');
 			    update_status_FinalCsv_create(clt.getClient_id(), clt.getProject_id(), 

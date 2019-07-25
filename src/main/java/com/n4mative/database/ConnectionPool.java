@@ -23,10 +23,10 @@ public class ConnectionPool {
 	
 	public static final String MYSQL_DRIVER = "com.mysql.jdbc.Driver";
     
-	//public static String URL = "jdbc:mysql://192.168.1.71:3306/";
+	public static String URL = "jdbc:mysql://192.168.1.71:3306/";
     public static final String USERNAME = "root";
-    public static final String PASSWORD = "Gauch022$#";
-    
+    //public static final String PASSWORD = "Gauch022$";
+    public static final String PASSWORD = "hadoop";
     //private GenericObjectPool connectionPool = null;
     private static ObjectPool<PoolableConnection> connectionPool = null;
     private static Object obj = new Object();
@@ -45,7 +45,7 @@ public class ConnectionPool {
 
 					dataSource = setUp(dbname);
 					//LOG.info("MySQL connection created");
-					//System.out.println("MySQL connection created");
+					System.out.println("MySQL connection created");
 				} 
 			} catch (Exception e) {
 				//LOG.error(e.getMessage());
@@ -62,7 +62,7 @@ public class ConnectionPool {
 
 					dataSource = setUp(host, dbname);
 					//LOG.info("MySQL connection created");
-					//System.out.println("MySQL connection created");
+					System.out.println("MySQL connection created");
 				} 
 			} catch (Exception e) {
 				//LOG.error(e.getMessage());
