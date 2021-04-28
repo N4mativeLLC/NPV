@@ -3,10 +3,6 @@ package com.n4mative.database;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
@@ -19,28 +15,25 @@ import org.apache.commons.dbcp2.PoolingDriver;
 import org.apache.commons.pool2.ObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 
-public class ConnectionPool {
+public class ConnectionPool_backup {
 	
-	private static Logger LOGGER = Logger.getLogger(ConnectionPool.class.getName());
 	public static final String MYSQL_DRIVER = "com.mysql.jdbc.Driver";
     
 	//public static String URL = "jdbc:mysql://192.168.1.71:3306/";
-    public static final String USERNAME = "liamapp";
-    //public static final String USERNAME = "root";
+    public static final String USERNAME = "root";
     public static final String PASSWORD = "Gauch022$";
     //public static final String PASSWORD = "hadoop";
-    
     //private GenericObjectPool connectionPool = null;
     private static ObjectPool<PoolableConnection> connectionPool = null;
     private static Object obj = new Object();
     private static DataSource dataSource = null;
     public static Class driverClass;
     
-    public ConnectionPool() {
+    public ConnectionPool_backup() {
 
     }
     
-    public ConnectionPool(String dbname) {
+    public ConnectionPool_backup(String dbname) {
     	
 		synchronized (obj) {
 			try {
@@ -48,7 +41,7 @@ public class ConnectionPool {
 
 					dataSource = setUp(dbname);
 					//LOG.info("MySQL connection created");
-					//System.out.println("MySQL connection created");
+					System.out.println("MySQL connection created");
 				} 
 			} catch (Exception e) {
 				//LOG.error(e.getMessage());
@@ -57,7 +50,7 @@ public class ConnectionPool {
 		}
 	}
     
-    public ConnectionPool(String host, String dbname) {
+    public ConnectionPool_backup(String host, String dbname) {
     	
 		synchronized (obj) {
 			try {
@@ -65,7 +58,7 @@ public class ConnectionPool {
 
 					dataSource = setUp(host, dbname);
 					//LOG.info("MySQL connection created");
-					//System.out.println("MySQL connection created");
+					System.out.println("MySQL connection created");
 				} 
 			} catch (Exception e) {
 				//LOG.error(e.getMessage());
@@ -73,31 +66,13 @@ public class ConnectionPool {
 			}
 		}
 	}
-    public ConnectionPool(String host, String dbname, String userName) {
-    	
-		synchronized (obj) {
-			try {
-					if (connectionPool == null || dataSource == null) {
-
-					dataSource = setUp(host, dbname,userName);
-					//LOG.info("MySQL connection created");
-					//System.out.println("MySQL connection created");
-				} 
-			} catch (Exception e) {
-				//LOG.error(e.getMessage());
-				e.printStackTrace();
-			}
-		}
-	}
-
+    
     private DataSource setUp(String host, String database) throws Exception {
     	
-    	SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
-    	Date date = new Date();
-    	//String URL = String.format("jdbc:mysql://%s:3306/%s?characterEncoding=latin1&useConfigs=maxPerformance", host, database); //jdbc:mysql://192.168.1.71:3306
-    	String URL = String.format("jdbc:mysql://%s:3306/%s?useUnicode=true&characterEncoding=UTF-8&useConfigs=maxPerformance", host, database); //jdbc:mysql://192.168.1.71:3306
-    	System.out.println("[" + sdf.format(date) + "]: " + URL);
-    	LOGGER.log(Level.INFO, URL);
+    	System.out.println(host);
+    	//url=jdbc:mysql://localhost:3306/hybrisdb?characterEncoding=latin1&useConfigs=maxPerformance
+    	String URL = String.format("jdbc:mysql://%s:3306/%s", host, database) + "?characterEncoding=latin1&useConfigs=maxPerformance"; //jdbc:mysql://192.168.1.71:3306
+    	System.out.println(URL);
     	
 		registerJDBCDriver(MYSQL_DRIVER);
 
@@ -117,40 +92,13 @@ public class ConnectionPool {
 
         return new PoolingDataSource(connectionPool);
     }
-    private DataSource setUp(String host, String database,String userName) throws Exception {
-    	
-    	//System.out.println(host);
-    	
-    	//String URL = String.format("jdbc:mysql://%s:3306/%s?characterEncoding=latin1&useConfigs=maxPerformance", host, database); //jdbc:mysql://192.168.1.71:3306
-    	String URL = String.format("jdbc:mysql://%s:3306/%s?useUnicode=true&characterEncoding=UTF-8&useConfigs=maxPerformance", host, database); //jdbc:mysql://192.168.1.71:3306
-    	System.out.println(URL);
-    	LOGGER.log(Level.INFO, URL);
-    	
-		registerJDBCDriver(MYSQL_DRIVER);
 
-		ConnectionFactory connectionFactory = 
-			getConnFactory(URL, userName, PASSWORD);
-		
-		PoolableConnectionFactory poolfactory = new PoolableConnectionFactory(
-				connectionFactory, null);
-
-        connectionPool = new GenericObjectPool<PoolableConnection>(poolfactory);
-
-        poolfactory.setPool(connectionPool);
-        
-        PoolingDriver dbcpDriver = PoolConnectionFactory.getDBCPDriver();
-
-        dbcpDriver.registerPool("LIAM-Connection pool", connectionPool);
-
-        return new PoolingDataSource(connectionPool);
-    }
     private DataSource setUp(String database) throws Exception {
     	
     	String host = System.getenv("mysql.host");
     	//host = env.getProperty("mysql.host");
     	System.out.println(host);
-    	//String URL = String.format("jdbc:mysql://%s:3306/%s?characterEncoding=latin1&useConfigs=maxPerformance", host, database); //jdbc:mysql://192.168.1.71:3306
-    	String URL = String.format("jdbc:mysql://%s:3306/%s?useUnicode=true&characterEncoding=UTF-8&useConfigs=maxPerformance", host, database); //jdbc:mysql://192.168.1.71:3306
+    	String URL = String.format("jdbc:mysql://%s:3306/%s", host, database); //jdbc:mysql://192.168.1.71:3306
     	System.out.println(URL);
     	
 		registerJDBCDriver(MYSQL_DRIVER);
@@ -192,7 +140,7 @@ public class ConnectionPool {
     public static Connection getConnection(String dbName) throws IOException, SQLException {
 
 		synchronized (obj) {
-			new ConnectionPool(dbName);
+			new ConnectionPool_backup(dbName);
 		}
 		printStatus();
 		return dataSource.getConnection();
@@ -201,19 +149,12 @@ public class ConnectionPool {
     public static Connection getConnection(String host, String dbName) throws IOException, SQLException {
 
 		synchronized (obj) {
-			new ConnectionPool(host, dbName);
+			new ConnectionPool_backup(host, dbName);
 		}
 		printStatus();
 		return dataSource.getConnection();
     }
-    public static Connection getConnection(String host, String dbName,String userName) throws IOException, SQLException {
-
-		synchronized (obj) {
-			new ConnectionPool(host, dbName,userName);
-		}
-		printStatus();
-		return dataSource.getConnection();
-    }
+    
     public static Connection getConnection() throws IOException, SQLException {
 
 		synchronized (obj) {
@@ -263,9 +204,9 @@ public class ConnectionPool {
      * Prints connection pool status.
      */
     private static void printStatus() {
-        /*System.out.println("Max   : " + getConnectionPool().getNumIdle() + "; " +
-                "Active: " + getConnectionPool().getNumActive() + "; " +
-                "Idle  : " + getConnectionPool().getNumIdle());*/
+        //System.out.println("Max   : " + getConnectionPool().getNumIdle() + "; " +
+        //        "Active: " + getConnectionPool().getNumActive() + "; " +
+        //        "Idle  : " + getConnectionPool().getNumIdle());
     }
     
 }

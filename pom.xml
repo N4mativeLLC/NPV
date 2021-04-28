@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>NPV</groupId>
   <artifactId>NPV</artifactId>
-  <version>0.1.1</version>
+  <version>0.1.7.8</version>
   <url>http://maven.apache.org</url>
   <parent>
 		<groupId>org.springframework.boot</groupId>
@@ -52,7 +52,35 @@
 	    <artifactId>google-api-services-drive</artifactId>
 	    <version>v3-rev102-1.23.0</version>
 	</dependency>
-  </dependencies>
+	<!-- google analytics -->
+		<!-- https://mvnrepository.com/artifact/com.google.apis/google-api-services-analyticsreporting -->
+		<dependency>
+		    <groupId>com.google.apis</groupId>
+		    <artifactId>google-api-services-analyticsreporting</artifactId>
+		    <version>v4-rev1-1.19.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.google.apis</groupId>
+		    <artifactId>google-api-services-analytics</artifactId>
+    		<version>v3-rev159-1.25.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.google.http-client</groupId>
+		    <artifactId>google-http-client-gson</artifactId>
+		    <version>1.21.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.api-client/google-api-client-gson -->
+		<dependency>
+		    <groupId>com.google.api-client</groupId>
+		    <artifactId>google-api-client-gson</artifactId>
+		    <version>1.19.1</version>
+		</dependency>
+		<dependency>
+           <groupId>org.json</groupId>
+           <artifactId>json</artifactId>
+           <version>20070829</version>
+       </dependency>
+</dependencies>
   <build>
         <plugins>
             <plugin>

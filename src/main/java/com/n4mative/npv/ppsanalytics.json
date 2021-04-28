@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "ppsanalytics",
+  "private_key_id": "a70f00e72c723f92b2d5cd607c5fa442b4576c2c",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQD2KjSzbkzIswfB\n/SG/4S4jfesm2+PulIhwY/SkjTHZFtjrj+6lmYciHZ5Q6WYnXLJEHCS2iteCPs9B\nl9g9MaIpUPLY3RnrXYPjJNTxeZwLCWH4pUmv0mQH0jnRUNO9yIBslPs9sGaJUgCI\n15mGOe4ei5xQQns1hkdIn/EYPIfjDgGn9lHZ7ZQoNCJf6qKN4r9OrVaTQjuYysxD\n21OhXI+7/7CF/bsYBbYxlS7auTCdHcsd7XTBCHF0AuRMow/lsL+NDiHHRfbwq/cg\noEMJW+JCKRHPxVBORUHlGKJobi1ExnxzLvtSoAVYgLXGiPOq7KImp5iDhcHGweB3\nu7zGIN2hAgMBAAECggEAF1sFyQhsDJa/463qp9Prlr55syQlyhsZnuA88+fZlOlQ\nB3mOgPPCGICK5s5ePNnUqBWrfg5KSDdBXs3TXGr7IcRmZiEENoqW2tRBx+9r2Lg5\nLWgxR5dEmmFdzvhGPrlpReQUulOkRt8a4eDi1hNk/kzstci4++kTllZmf5AurGIW\nL1rHuWI4kjSeuvD5r/AqcUAjug9YTUrRBVkTMDEFZBFO0rJySufVZMdi99MhL7bc\n3RaW99qKDfEtuVthmMNwkrdj8a/PHHpZpkwYG3F2c1EvbaQiiTVdCQRMRxsXNmoc\nidcBIU18e30xS/OiqUk+eozmAAIJle3wAuvgz/i+yQKBgQD7WaTw+zMudsX39fbS\nh6XXafj7GV+dWKkpU2/7hrDVCTImJ8RVUXjCdovzMXQvPKCiFQLtBQqyZ14GVmwP\nN1rRCtpiJvdBUZiVWnuJsdBNiqOmWJjL4e65W+43FJ0rFgV3GHcyLJ6Kuovq4xFS\ndHleOTUdw+JczADwpz2MumHWWwKBgQD6uAE3Ms0XNDjaJh1zmXiBZvHomfROhILe\ndyBPE6nFMX9xqlaBeBLo1hgltV6ngerl2JqoE4pjtnbE/X9siuLYb0PcPJoZ++WY\nQenVRlqCfL6Ivr8pDRKsgOBsVw3DdW5Pi8/0SGYxC7se/poF9fsOafkq7Bnmlibg\nyvsHSwC0swKBgCoSlVNpGOYcJ4Mb/ta6sf3e1ThixOh3oMk0GDiIES13vpc4bNrD\nKm2SnlZ03rfRdCntTnISN/oo50o0SR466861/FwVnamnWN0XKjqgMvfnzwDXL6xh\nAy6vvq4lmzFNHFkVFU6mvVsHYshMfefJa09kUAnNciSKWVXvCJR31kylAoGBAOec\nIBNb7LZo2bQ8zaxCtF3mOcdEobn/E95rcf9bDNRL242na+6CfAV38iqzl9NqYxMd\nvBFUq91da+6it5oP22tRrgDAQyOJ3hl/moIZUfeFQYaVn4ZOu1d8XtX2vZI440S8\nxcjHMRBR4/TIAoVLLTetki6imXK4dwXmvWuJUAedAoGAFwMDz1V0Zo+cEAQuWxOm\nLKAG4Pvt3NfJNtVqUIKdwxL1s/GrX+OHSAVcQsVN95/AyX13Id0jVjbIkwD2hxrS\n7oHh1jVE3k4WO1gRcgtxOydRZp1n7XyDVxXvaIahD/oXeKzjKwirTKusJIeEvJtC\nciIELLEbXP4eVrQAiWrdtfs=\n-----END PRIVATE KEY-----\n",
+  "client_email": "ppsanalytics@ppsanalytics.iam.gserviceaccount.com",
+  "client_id": "111099932996110558058",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/ppsanalytics%40ppsanalytics.iam.gserviceaccount.com"
+}

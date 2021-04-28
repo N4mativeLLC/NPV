@@ -1,0 +1,122 @@
+{
+    "totalsForAllResults": {"ga:pageviews": "14"},
+    "columnHeaders": [
+        {
+            "name": "ga:date",
+            "columnType": "DIMENSION",
+            "dataType": "STRING"
+        },
+        {
+            "name": "ga:pagePath",
+            "columnType": "DIMENSION",
+            "dataType": "STRING"
+        },
+        {
+            "name": "ga:pageTitle",
+            "columnType": "DIMENSION",
+            "dataType": "STRING"
+        },
+        {
+            "name": "ga:pageviews",
+            "columnType": "METRIC",
+            "dataType": "INTEGER"
+        }
+    ],
+    "totalResults": 12,
+    "profileInfo": {
+        "profileName": "All Web Site Data",
+        "accountId": "133520286",
+        "profileId": "188977355",
+        "tableId": "ga:188977355",
+        "internalWebPropertyId": "193357342",
+        "webPropertyId": "UA-133520286-1"
+    },
+    "itemsPerPage": 10000,
+    "kind": "analytics#gaData",
+    "query": {
+        "end-date": "today",
+        "max-results": 10000,
+        "start-index": 1,
+        "ids": "ga:188977355",
+        "start-date": "5daysAgo",
+        "metrics": ["ga:pageviews"],
+        "dimensions": "ga:date, ga:pagePath,ga:pageTitle"
+    },
+    "containsSampledData": false,
+    "id": "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:188977355&dimensions=ga:date,+ga:pagePath,ga:pageTitle&metrics=ga:pageviews&start-date=5daysAgo&end-date=today&max-results=10000",
+    "rows": [
+        [
+            "20190307",
+            "/n4mvp/v2/testVideo/videoJsAutoPlayNm.html?v=/videos/nedbank/campaign1/SampleVideo.mp4",
+            "N4mative-Video",
+            "1"
+        ],
+        [
+            "20190307",
+            "/n4mvp/v2/testVideo/videoJsAutoPlayNm.html?v=/videos/nedbank/campaign1/big_buck_bunny.mp4",
+            "N4mative-Video",
+            "1"
+        ],
+        [
+            "20190308",
+            "/n4mvp/v2/testVideo/videoJsAutoPlayNm.html?v=/videos/nedbank/campaign1/SampleVideo.mp4",
+            "N4mative-Video",
+            "1"
+        ],
+        [
+            "20190308",
+            "/n4mvp/v2/testVideo/videoJsAutoPlayNm.html?v=/videos/nedbank/campaign1/big_buck_bunny.mp4",
+            "N4mative-Video",
+            "1"
+        ],
+        [
+            "20190308",
+            "/n4mvp/v2/testVideo/videoJsAutoPlayNm.html?v=/videos/nedbank/campaign2/SampleVideo.mp4",
+            "N4mative-Video",
+            "1"
+        ],
+        [
+            "20190308",
+            "/n4mvp/v2/testVideo/videoJsAutoPlayNm.html?v=/videos/nedbank/campaign3/SampleVideo.mp4",
+            "N4mative-Video",
+            "1"
+        ],
+        [
+            "20190310",
+            "/n4mvp/v2/testVideo/videoJsMyTest.html?v=/n4mvp/v2/testVideo/MY_VIDEO.mp4",
+            "N4mative-Video",
+            "1"
+        ],
+        [
+            "20190311",
+            "/n4mvp/v2/testVideo/videoJsAutoPlayNm.html?v=/videos/nedbank/campaign1/MY_VIDEO.mp4",
+            "N4mative-Video",
+            "1"
+        ],
+        [
+            "20190311",
+            "/n4mvp/v2/testVideo/videoJsAutoPlayNm.html?v=/videos/nedbank/campaign1/SampleVideo.mp4",
+            "N4mative-Video",
+            "1"
+        ],
+        [
+            "20190311",
+            "/n4mvp/v2/testVideo/videoJsAutoPlayNm.html?v=/videos/nedbank/campaign1/big_buck_bunny.mp4",
+            "N4mative-Video",
+            "1"
+        ],
+        [
+            "20190311",
+            "/n4mvp/v2/testVideo/videoJsAutoPlayNm.html?v=/videos/nedbank/campaign2/big_buck_bunny.mp4",
+            "N4mative-Video",
+            "1"
+        ],
+        [
+            "20190311",
+            "/n4mvp/v2/testVideo/videoJsAutoPlayNm.html?v=/videos/nedbank/campaign3/big_buck_bunny.mp4",
+            "N4mative-Video",
+            "3"
+        ]
+    ],
+    "selfLink": "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:188977355&dimensions=ga:date,+ga:pagePath,ga:pageTitle&metrics=ga:pageviews&start-date=5daysAgo&end-date=today&max-results=10000"
+}

@@ -22,35 +22,33 @@ import java.util.Map;
 import com.n4mative.database.ConnectionPool;
 //import com.n4mative.database.ConnectionPool;
 
-public class pps {
+public class absa_aro {
 	
-	//static String host = "192.168.1.71";
-    //static String db = "NPV_QA";
-    //static String clientName="absa";
-    
-    public static void main(String[] args) throws ParseException {
+	 public static void main(String[] args) throws ParseException {
     	
-    	/*String inputFile= args[1];
-    	//String purlFile= args[1];
+    	String inputFile= args[1];
     	String outputFilePath=args[2];
     	String host = args[3];
         String db = args[4];
         String clientName=args[5];
-        String username= args[6];*/
-    	String inputFile= "/Users/surbhi/git/NPV/src/main/resources/PPS/INPUT/purl_longName.csv";
-    	String outputFilePath="/Users/surbhi/git/NPV/src/main/resources/PPS/OUTPUT/";
-    	String host = "192.168.1.71";
-        String db = "NPV_QA";
-        String clientName="pps";
-        String username= "liamapp";
+        String username=args[6];
+        
+    	/*String inputFile= "/Users/surbhi/git/NPV/src/main/resources/ABSA/INPUT/sample-5.csv";
+    	String outputFilePath="/Users/surbhi/git/NPV/src/main/resources/ABSA/OUTPUT/";
+    	String host = "35.156.191.67";//"192.168.1.71";//;
+        String db = "NPV_Analytics";//"NPV_QA";//;
+        String clientName="absa";
+        String username= "root";//"liamapp";*/
+        
     	String dt = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
     	
     	if (args[0].equalsIgnoreCase("initialFile")){
     		readInitialFile(inputFile,host,db,clientName,username);
+    	}else if (args[0].equalsIgnoreCase("createInitial")){
     		createInitialCsv_noDateDiff("*",dt,outputFilePath,host,db,clientName,username);
-    		
     	}else if (args[0].equalsIgnoreCase("purlFile")){
-    		//readPurlFile(inputFile,host,db,clientName,username);
+    		readPurlFile(inputFile,host,db,clientName,username);
+    	}else if (args[0].equalsIgnoreCase("createFinal")){
     		createFinalDispatchCsv("*",dt,outputFilePath,host,db,clientName,username);
     	}
     }
@@ -58,21 +56,22 @@ public class pps {
     private static void readInitialFile(String csvFile, String host, String db, String clientName, String username) throws ParseException{
     	BufferedReader br = null;
         String line = "";
-        String csvSplitBy = "\\|";
+        String csvSplitBy = "\\,";
         //String firstName="";
         try {
         	
         	int count= 1;
             br = new BufferedReader(new FileReader(csvFile));
             String headerline = br.readLine();
+            //while ((line = br.readLine()) != null && count <=10) {
             while ((line = br.readLine()) != null) {
-            	
             	String[] data = line.split(csvSplitBy);
+            	//String customer_id=data.length > 0 ? data[5].trim() : "";
             	String customer_id=data.length > 0 ? data[0].trim() : "";
-            	String customer_name=data.length > 1 ? data[4].trim() : "";
+            	String customer_name=data.length > 1 ? data[1].trim() : "";
             	String data_string= line;
             	
-            	saveClient(count,customer_id,customer_name,data_string,host,db,clientName);
+            	saveClient(count,customer_id,customer_name,data_string,host,db,clientName,username);
                 count = count+1;
             }
             System.out.println(count);
@@ -95,20 +94,20 @@ public class pps {
 
     }
     
-    private static void saveClient(int count, String customer_id, String customer_name,  String data_string, String host, String db, String clientName) {
+    private static void saveClient(int count, String customer_id, String customer_name,  String data_string, String host, String db, String clientName, String username) {
 		
     	//System.out.println("host: " + host + "  db: " + db);
         CallableStatement stmt = null;
 		String strSQL = "{call sp_InsertClientInfo(?,?,?,?,?,?,?,?)}";
 		
-		try (Connection conn = ConnectionPool.getConnection(host, db)) {
+		try (Connection conn = ConnectionPool.getConnection(host, db,username)) {
 			  	
 				stmt = conn.prepareCall(strSQL);
 				// set all the preparedstatement parameters
 				stmt.setString(1, clientName);
-				stmt.setInt(2, 5); //client_id
-				stmt.setInt(3, 3); //project_id
-				stmt.setInt(4, 12); //generate_id
+				stmt.setInt(2, 4);
+				stmt.setInt(3, 2);
+				stmt.setInt(4, 11);
 				stmt.setString(5, customer_id);
 				stmt.setString(6, customer_name);
 				stmt.setString(7, data_string);
@@ -137,50 +136,39 @@ public class pps {
 		
 	}
 
-	private static void preprocess(String host, String db, String clientName,String username) throws ParseException {
+	private static void preprocess(String host, String db, String clientName, String username) throws ParseException {
 		String initialLetter = "*";
 		List<Client> clients = getClient(initialLetter,host,db,clientName,username,"Record Recieved");
-		String strDelim="|";
+		String strDelim=",";
 		String cvsSplitBy = "\\"+strDelim;
 		for(Client clt : clients){
-			String line=clt.getData_string();
-			
-			String dataRow="";
+            String line=clt.getData_string();
+           
+            String dataRow="";
 			line=line.trim();
-        	if (!line.endsWith("|"))
+        	if (!line.endsWith(","))
         			line+=strDelim;
         	String[] data = line.split(cvsSplitBy);
-        	String parsedName=data[4].toLowerCase().replaceAll(" - ","_").replaceAll("-", "_").replaceAll("'", "_");
-        	System.out.println(parsedName);
         	
-        	//SimpleDateFormat sdf = new SimpleDateFormat("MMMM-yy");
-            //String dateInString = data[5];
-            //Date date = sdf.parse(dateInString);
-            //System.out.println(date);
-            //Format formatter = new SimpleDateFormat("MMMM YYYY"); 
-            String from_date = "as at "+data[5];//formatter.format(date); //TODO: comment
-            //System.out.println(from_date);
-            
-        	//Date nextYear= DateUtils.addYears(date, 1);
-        	String to_date= "as at "+ data[6];//formatter.format(nextYear); //TODO: comment
-        	//TODO: match data with input file columns    
-        	dataRow+=data[0]+strDelim+data[1]+strDelim+data[2]+strDelim+data[3]+strDelim+data[4]+strDelim+parsedName+
-        			strDelim+from_date+strDelim+to_date+strDelim+data[7]+strDelim+data[8]+ 
-        			strDelim+data[9]+strDelim+data[10]+strDelim+data[11]+strDelim+data[12]+strDelim+data[13];
-
-        	update_status_PreProcess(clt.getClient_id(),clt.getProject_id(),
-        			clt.getGenerate_id(),clt.getCustomer_id(),dataRow,host,db,clientName);
-      	}
+        	String modifiedFirstName =data[1].trim().replaceAll("\\.","_").replaceAll(":","_").
+        			replaceAll("-","_").replaceAll(" ","_");
+        	
+        	
+        	dataRow+=data[0]+strDelim+data[1]+strDelim+modifiedFirstName+strDelim+data[2]+strDelim+data[3]+strDelim+data[4];
+	    
+	     update_status_PreProcess(clt.getClient_id(),clt.getProject_id(),
+	            clt.getGenerate_id(),clt.getCustomer_id(),dataRow,host,db,clientName,username);
+	}
             
 			//System.out.println(" Pre Process completed successfully.");
 	}
 
-	private static void update_status_PreProcess(int client_id, int project_id, int generate_id, String customer_id, String dataRow, String host, String db, String clientName) {
+	private static void update_status_PreProcess(int client_id, int project_id, int generate_id, String customer_id, String dataRow, String host, String db, String clientName, String username) {
 
     	CallableStatement stmt = null;
 		String strSQL = "{call sp_Update_status_preprocess_v1(?,?,?,?,?,?)}";
 		
-		try (Connection conn = ConnectionPool.getConnection(host, db)) {
+		try (Connection conn = ConnectionPool.getConnection(host, db,username)) {
 			  	
 				stmt = conn.prepareCall(strSQL);
 				// set all the preparedstatement parameters
@@ -215,7 +203,7 @@ public class pps {
 
 	}
  
-	public static List<Client> getClient(String initialLetter, String host, String db, String clientName, String username,String status) {
+	public static List<Client> getClient(String initialLetter, String host, String db, String clientName,String username,String status) {
 		PreparedStatement ps = null;
 		CallableStatement stmt = null;
 		ResultSet rs = null;
@@ -283,13 +271,14 @@ public class pps {
     	//String filename = "/Users/surbhi/Documents/workspace/NPV/src/main/resources/output/ParsedVideoFile"+initialLetter+dt+".csv";
     	String filename = outputFilePath+"parsedvideoFile"+initialLetter+dt+".csv";
 
-        try (Connection conn = ConnectionPool.getConnection(host, db)){
+        try (Connection conn = ConnectionPool.getConnection(host, db,username)){
             
             FileWriter fw = new FileWriter(filename);
             //FileWriter fw1 = new FileWriter(filename1);
             List<Client> clients = getClient(initialLetter,host,db,clientName,username,"preprocess completed");
             
-            String header="customer_id|Found|Not None|Found and not none|customer_First_name|customer_name_lower|from_date|to_date|Profit_Share_Account_Balance|PPS_Credit_Card|Health_Professionals_Indemnity|Indemnity from HPCSA|Indemnity Match|Reason as to why not matching|Projected_Profite_Share_Increase";
+            String header="customer_number,first_name,modified_first_name,family_name,acc_type,Account_Customer_Type";
+            
             fw.append(header);
             fw.append('\n');
               for(Client clt : clients){
@@ -297,7 +286,7 @@ public class pps {
             	  fw.append(allDataString);
                 	 fw.append('\n');
                 	 update_statusCsvCreated_initial(clt.getClient_id(), clt.getProject_id(), 
-                			 clt.getGenerate_id(), clt.getCustomer_id(),host,db,clientName);
+                			 clt.getGenerate_id(), clt.getCustomer_id(),host,db,clientName,username);
 
                 
              }
@@ -314,11 +303,11 @@ public class pps {
         }
     }
 	
-    private static void update_statusCsvCreated_initial(int clientId, int projectId, int generateID, String customer_id, String host, String db, String clientName) {
+    private static void update_statusCsvCreated_initial(int clientId, int projectId, int generateID, String customer_id, String host, String db, String clientName, String username) {
     	CallableStatement stmt = null;
 		String strSQL = "{call sp_UpdateCsvCreated_initial_v1(?,?,?,?,?)}";
 		
-		try (Connection conn = ConnectionPool.getConnection(host, db)) {
+		try (Connection conn = ConnectionPool.getConnection(host, db,username)) {
 			  	
 				stmt = conn.prepareCall(strSQL);
 				// set all the preparedstatement parameters
@@ -351,10 +340,10 @@ public class pps {
 		}
 	}
     
-    private static void readPurlFile(String csvFile, String host, String db, String clientName){
+    private static void readPurlFile(String csvFile, String host, String db, String clientName, String username){
     	BufferedReader br = null;
         String line = "";
-        String csvSplitBy = "\\|";
+        String csvSplitBy = "\\,";
         //String firstName="";
         try {
         	
@@ -368,9 +357,9 @@ public class pps {
             String[] header=headerline.split(csvSplitBy);
             Map<String,Integer> indx = new HashMap<String,Integer>();
         	for (int i=0; i< header.length;i++){
-        		if (header[i].toUpperCase().equals("CUSTOMER_fIRST_NAME")){
+        		if (header[i].toUpperCase().equals("FIRST_NAME")){
         			customer_name=i;
-        		}else if(header[i].toUpperCase().equals("CUSTOMER_ID")){
+        		}else if(header[i].toUpperCase().equals("CUSTOMER_NUMBER")){
         			customer_id=i;
         		}else if(header[i].toUpperCase().equals("VIDEO")){
         			video_link=i;
@@ -400,22 +389,19 @@ public class pps {
             	String strDelim="|";
             	String[] data1 = line.split(csvSplitBy);
             	String outLine="";
-            	//System.out.println(data1[data1.length-3]);
-            	System.out.println(indx.get("customer_id"));
-            	System.out.println(data1[indx.get("customer_id")]);
-            	outLine+=data1[indx.get("customer_id")]+strDelim;
-            	outLine+=data1[indx.get("customer_First_name")]+strDelim;
-            	outLine+=data1[indx.get("Profit_Share_Account_Balance")]+strDelim;
-            	outLine+=data1[indx.get("from_date")]+strDelim;
-            	outLine+=data1[indx.get("Projected_Profite_Share_Increase")]+strDelim;
-            	outLine+=data1[indx.get("to_date")]+strDelim;
-            	outLine+=data1[indx.get("PPS_Credit_Card")]+strDelim;
-            	outLine+=data1[indx.get("Health_Professionals_Indemnity")]+strDelim;
-            	outLine+=data1[indx.get("video")];
+            	
+
+            	//System.out.println(data1[indx.get("MemberNumber")]);
+            	outLine+=data1[indx.get("acc_type")]+strDelim;
+            	outLine+=data1[indx.get("first_name")]+strDelim;
+            	outLine+=data1[indx.get("customer_number")]+strDelim;
+            	outLine+=data1[indx.get("Account_Customer_Type")]+strDelim;
+            	outLine+=data1[indx.get("video")]+strDelim;
+            	outLine+=data1[indx.get("thumbnail_1")];
             	
             	System.out.println(outLine);
-    			    upadteClient_purlReceived(5,1,4,customer_id_1,video_link_1,video_file,thumbnail_s,
-    			    		thumbnail_1_1,purl_string, outLine,host,db,clientName);
+    			    upadteClient_purlReceived(4,2,11,customer_id_1,video_link_1,video_file,thumbnail_s,
+    			    		thumbnail_1_1,purl_string, outLine,host,db,clientName,username);
 
             	}
          
@@ -438,11 +424,11 @@ public class pps {
     private static void upadteClient_purlReceived(int clientId, int projectId, int generateID, String customer_id, 
     											String video_link,String video_file, String thumbnail, 
     											String thumbnail1, String purl_string, String QA_Purl, 
-    											String host, String db, String clientName) {
+    											String host, String db, String clientName, String username) {
     	CallableStatement stmt = null;
 		String strSQL = "{call sp_UpdatePurlReceived_v1(?,?,?,?,?,?,?,?,?,?,?)}";
 		
-		try (Connection conn = ConnectionPool.getConnection(host, db)) {
+		try (Connection conn = ConnectionPool.getConnection(host, db,username)) {
 			  	
 				stmt = conn.prepareCall(strSQL);
 				// set all the preparedstatement parameters
@@ -492,27 +478,25 @@ public class pps {
 	    	FileWriter fw = new FileWriter(filename);
 	    	List<Client> clients = getClient(initialLetter,host,db,clientName,username,"Purl Received");
 	    	
-        	String header="Customer_id|Customer_name|Video|ThumbNail_link";
+        	String header="Customer_Number,Customer_Name,Video,ThumbNail_link";
         	fw.append(header);
         	fw.append('\n');
           	for(Client clt : clients){
           		if(clt.getVideo_file()!=null){
 				    fw.append(clt.getCustomer_id());
-				    fw.append('|');
-				    fw.append(clt.getCustomer_name());
-				    fw.append('|');
-				    //fw.append("https://pps.nvidyo.co.za/n4mvp/v2/testVideo/videoJsAutoPlayNm.html?v=/videos/pps/ins_cc/"+
-				    //			clt.getVideo_file());
-				    //fw.append("https://pps.nvidyo.co.za/videos/pps/ins_cc/"+clt.getVideo_file());
-				    fw.append("https://pps.nvidyo.co.za/videos/pps/ins_cc/"+clt.getCustomer_id()+"_"+ 
-				    clt.getCustomer_name()+"_"+clt.getVideo_file());
-				    //fw.append(clt.getVideo_file());
-				    fw.append('|');
-				    fw.append("https://pps.nvidyo.co.za/thumb/pps/ins_cc/"+clt.getVideo_file().replaceAll(".mp4",".jpg"));
+				    fw.append(',');
 				    
+				    fw.append(clt.getCustomer_name());
+				    fw.append(',');
+				    fw.append("https://absa.nvidyo.co.za/n4mvp/v2/vplayer/nvidyoPlayer.html?v=/videos/absa/aro-ghana/"+
+				    			clt.getVideo_file());
+				    fw.append(',');
+				    //fw.append("https://pps.nvidyo.co.za/thumb/pps/prof_share/"+clt.getVideo_file().replaceAll(".mp4",".jpg"));
+				    String thumb=clt.getThumbnail_link1().substring(clt.getThumbnail_link1().lastIndexOf("/")+1);
+				    fw.append("https://absa.nvidyo.co.za/thumb/absa/aro-ghana/"+ thumb);
 				    fw.append('\n');
 				    update_status_FinalCsv_create(clt.getClient_id(), clt.getProject_id(), 
-				    		clt.getGenerate_id(), clt.getCustomer_id(),host,db,clientName);
+				    		clt.getGenerate_id(), clt.getCustomer_id(),host,db,clientName,username);
           		}
           	}
 	            System.out.println(" Final Dispatched CSV is created successfully.");
@@ -526,11 +510,11 @@ public class pps {
 	    }
     }
     
-    private static void update_status_FinalCsv_create(int clientId, int projectId, int generateID, String customer_id, String host, String db, String clientName) {
+    private static void update_status_FinalCsv_create(int clientId, int projectId, int generateID, String customer_id, String host, String db, String clientName, String username) {
     	CallableStatement stmt = null;
 		String strSQL = "{call sp_update_status_FinalCsv_create_v1(?,?,?,?,?)}";
 		
-		try (Connection conn = ConnectionPool.getConnection(host, db)) {
+		try (Connection conn = ConnectionPool.getConnection(host, db,username)) {
 			  	
 				stmt = conn.prepareCall(strSQL);
 				// set all the preparedstatement parameters

@@ -5,20 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.springframework.core.env.Environment;
-
-import com.n4mative.database.ConnectionPool;
-//import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 public class FNBCsvParser_08212018 {

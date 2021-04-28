@@ -1,7 +1,5 @@
 package com.n4mative.csvParser;
 
-import java.util.Date;
-
 public class Client {
 	
 	private int client_id;
